@@ -15,7 +15,7 @@
   ],
   "require": {
     "yiisoft/yii2": "^2.0",
-    "carono/yii2-installer": "^0.0.9"
+    "carono/yii2-installer": "*"
   },
   "autoload": {
     "psr-4": {
