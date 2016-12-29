@@ -1,0 +1,25 @@
+{
+  "name": "carono/yii2-file-upload",
+  "description": "File storage table",
+  "type": "yii2-extension",
+  "keywords": [
+    "yii2",
+    "extension"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alexander Kasyanov",
+      "email": "spamer2000@yandex.ru"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "^2.0",
+    "carono/yii2-installer": "^0.0.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "carono\\yii2file\\": ""
+    }
+  }
+}
