@@ -41,7 +41,7 @@ class m161228_100819_init extends \carono\yii2installer\Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         } else {
-            $tableOptions = [];
+            $tableOptions = null;
         }
         $this->upNewTables([], $tableOptions);
         $this->upNewIndex();
