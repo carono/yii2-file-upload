@@ -5,7 +5,6 @@
 class m170927_171858_fu extends \carono\yii2file\FileUploadMigration
 {
     public $tableName = '{{%file_upload}}';
-
 }
 ```
 
@@ -15,9 +14,9 @@ class m170927_171858_fu extends \carono\yii2file\FileUploadMigration
 ================
 1. В вашу модель таблицы `file_upload` добавить трейт `carono\yii2file\FileUploadTrait`  
 2. После этого можно сохранять файлы следующим образом:
-`FileUpload::startUpload('@runtime/test.txt')->process();`  
-`FileUpload::startUpload('http://example.com/file.txt')->process();`
-`FileUpload::startUpload(yii\web\UploadedFile $file)->process();`
+`FileUpload::startUpload('@runtime/test.txt')->process();`   
+`FileUpload::startUpload('http://example.com/file.txt')->process();`  
+`FileUpload::startUpload(yii\web\UploadedFile $file)->process();`  
 
 По цепочке можно добавлять дополнительные свойства  
 
