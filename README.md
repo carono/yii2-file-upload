@@ -6,7 +6,8 @@ class m170927_171858_fu extends \carono\yii2file\FileUploadMigration
 {
     public $tableName = '{{%file_upload}}';
 
-}```
+}
+```
 
 2. Или выполнить `yii migrate --migrationPath=@vendor/carono/yii2-file-upload/migrations`
 
