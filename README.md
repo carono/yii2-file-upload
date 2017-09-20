@@ -13,7 +13,7 @@ class m170927_171858_fu extends \carono\yii2file\FileUploadMigration
 Как использовать
 ================
 1. В вашу модель таблицы `file_upload` добавить трейт `carono\yii2file\FileUploadTrait`  
-2. После этого можно сохранять файлы следующим образом:
+2. После этого можно сохранять файлы следующим образом:  
 `FileUpload::startUpload('@runtime/test.txt')->process();`   
 `FileUpload::startUpload('http://example.com/file.txt')->process();`  
 `FileUpload::startUpload(yii\web\UploadedFile $file)->process();`  
@@ -24,9 +24,9 @@ class m170927_171858_fu extends \carono\yii2file\FileUploadMigration
 FileUpload::startUpload('@runtime/img.png')
 ->slug('user_avatar') // поле slug
 ->data(['id'=>1]) // произвольные данные, записываются в data как json
-->name('user_avatar.png') // сохраним файл с новым именем
+->name('user_avatar.png') // сохраним файл в базе с новым именем
 ->folder('@app/new_destination') // сохраним файл в новой папке, по умолчанию @app/files
-->delete(false) // не удалять файл источник, по завершению, по умолчанию - удаляем
+->delete(false) // не удалять файл источник по завершению, по умолчанию - удаляем
 ->process(); // сохраним модель
 ```
 
@@ -57,3 +57,5 @@ FileUpload::startUpload('@runtime/img.png')
 подробнее смотрите `carono\yii2file\Uploader`
 
 Не забудьте добавить поведение `yii\behaviors\TimestampBehavior` для хранения времени добавления
+
+Загрузку файла необходимо оборачивать try...catch, т.к. будут вызываться Exception при ошибках
