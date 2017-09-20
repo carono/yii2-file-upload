@@ -32,19 +32,23 @@ FileUpload::startUpload('@runtime/img.png')
 
 Свойства трейта
 ===============
-`public $fileNameAsUid = true` - Реальный файл хранить как `uid.extension` (bb1fe78c3b769eee34202da2ac1e89c8.txt), иначе как `fileName.extension` (test.txt)
-`public $eraseOnDelete = true` - при вызове delete(), удалять реальный файл
-`public $fileUploadFolder = '@app/files'` - папка хранения файлов
+|Свойство|Значение|Описание
+|-----|--------|---------
+|$fileNameAsUid|true|Реальный файл хранить как `uid.extension` (bb1fe78c3b769eee34202da2ac1e89c8.txt), иначе как `fileName.extension` (test.txt)
+|$eraseOnDelete|true|при вызове delete(), удалять реальный файл
+|$fileUploadFolder|@app/files|папка хранения файлов
 
 Методы трейта
 =============
-`startUpload($file)` - начать загрузку файла
-`deleteFile()` - удалить реальный файл
-`getRealFileName()` - получить имя файла, которое хранится в FS
-`getRealFilePath()` - полный путь реального файла
-`fileExist()` - проверка существования файла
-`isImage()` - файл по mimeType является картинкой
-`getFileName()` - имя файла, которое записано в базе (user_avatar.png)
+|Метод|Описание
+|-----|--------
+|startUpload($file)|начать загрузку файла
+|deleteFile()|удалить реальный файл
+|getRealFileName()|получить имя файла, которое хранится в FS
+|getRealFilePath()|полный путь реального файла
+|fileExist()|проверка существования файла
+|isImage()|файл по mimeType является картинкой
+|getFileName()|имя файла, которое записано в базе (user_avatar.png, а в FS хранится как bb1fe78c3b769eee34202da2ac1e89c8.png)
 
 
 Особенности
