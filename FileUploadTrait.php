@@ -36,7 +36,7 @@ use yii\helpers\FileHelper;
  */
 trait FileUploadTrait
 {
-    public $fileNameAsUid = false;
+    public $fileNameAsUid = true;
     public $eraseOnDelete = true;
     public $uploaderClass = 'carono\yii2file\Uploader';
     public $fileUploadFolder = '@app/files';
@@ -62,6 +62,9 @@ trait FileUploadTrait
         ]);
     }
 
+    /**
+     * @return bool
+     */
     public function deleteFile()
     {
         if ($this->fileExist()) {
