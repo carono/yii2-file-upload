@@ -178,18 +178,10 @@ class Uploader extends Component
         $model->setAttributes($attributes);
     }
 
-    /**
-     * @return FileUploadTrait|null
-     * @throws \Exception
-     */
-    public function process()
+    public function formAttributes()
     {
-        /**
-         * @var FileUploadTrait $model
-         */
-        $model = new $this->modelClass();
         $this->processFilePath($this->file);
-        $this->loadAttributes($model, [
+        return [
             'session' => $this->getSession(),
             'name' => $this->getFileNameWithOutExtension(),
             'extension' => $this->getFileExtension(),
@@ -201,7 +193,20 @@ class Uploader extends Component
             'folder' => self::formAliasPath($this->getUid(), $this->folder),
             'slug' => $this->slug,
             'size' => filesize($this->filePath)
-        ]);
+        ];
+    }
+
+    /**
+     * @return FileUploadTrait|null
+     * @throws \Exception
+     */
+    public function process()
+    {
+        /**
+         * @var FileUploadTrait $model
+         */
+        $model = new $this->modelClass();
+        $this->loadAttributes($model, $this->formAttributes());
         $newFilePath = $model->getRealFilePath();
         if (!is_dir($realFolder = dirname($newFilePath))) {
             mkdir($realFolder, 0777, true);

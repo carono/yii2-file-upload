@@ -34,8 +34,8 @@ class m161228_100819_init extends \yii\db\Migration
     public function newIndex()
     {
         return [
-            ['file_upload', ['is_active', 'is_exist']],
-            ['file_upload', 'slug'],
+            [$this->tableName, ['is_active', 'is_exist']],
+            [$this->tableName, 'slug'],
         ];
     }
 

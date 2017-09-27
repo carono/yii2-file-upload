@@ -39,6 +39,7 @@ trait FileUploadTrait
     public $fileNameAsUid = false;
     public $eraseOnDelete = true;
     public $uploaderClass = 'carono\yii2file\Uploader';
+    public $fileUploadFolder = '@app/files';
 
     public function init()
     {
@@ -52,12 +53,12 @@ trait FileUploadTrait
      */
     public static function startUpload($file)
     {
-        $class = (new self())->uploaderClass;
+        $model = new self();
         return \Yii::createObject([
+            'class' => $model->uploaderClass,
             'modelClass' => self::className(),
-            'class' => $class,
             'file' => $file,
-            'folder' => '@app/files'
+            'folder' => $model->fileUploadFolder
         ]);
     }
 
