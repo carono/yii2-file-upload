@@ -59,3 +59,7 @@ FileUpload::startUpload('@runtime/img.png')
 Не забудьте добавить поведение `yii\behaviors\TimestampBehavior` для хранения времени добавления
 
 Загрузку файла необходимо оборачивать try...catch, т.к. будут вызываться Exception при ошибках
+
+<p align="center">
+    <img src="schema.png">
+</p>
