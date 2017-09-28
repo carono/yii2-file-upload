@@ -60,6 +60,8 @@ FileUpload::startUpload('@runtime/img.png')
 
 Загрузку файла необходимо оборачивать try...catch, т.к. будут вызываться Exception при ошибках
 
+Схема
+=====
 <p align="center">
     <img src="schema.png">
 </p>
