@@ -166,7 +166,7 @@ class Uploader extends Component
      */
     public function getNewFileAlias()
     {
-        return self::formAliasPath($this->getUid(), $this->folder);
+        return static::formAliasPath($this->getUid(), $this->folder);
     }
 
     /**
@@ -190,7 +190,7 @@ class Uploader extends Component
             'data' => !is_null($this->data) ? json_encode($this->data) : null,
             'mime_type' => $this->getMimeType(),
             'md5' => md5_file($this->filePath),
-            'folder' => self::formAliasPath($this->getUid(), $this->folder),
+            'folder' => static::formAliasPath($this->getUid(), $this->folder),
             'slug' => $this->slug,
             'size' => filesize($this->filePath)
         ];
