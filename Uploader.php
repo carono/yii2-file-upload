@@ -80,9 +80,7 @@ class Uploader extends Component
     protected function getSession()
     {
         if (isset(Yii::$app->session)) {
-            Yii::$app->session->open();
             $session = Yii::$app->session->getIsActive() ? Yii::$app->session->getId() : null;
-            Yii::$app->session->close();
         } else {
             $session = null;
         }
