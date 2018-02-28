@@ -22,5 +22,11 @@
     "psr-4": {
       "carono\\yii2file\\": ""
     }
-  }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ]
 }
