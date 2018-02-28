@@ -1,3 +1,8 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/carono/yii2-file-upload/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/carono/yii2-file-upload/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/carono/yii2-file-upload/v/stable)](https://packagist.org/packages/carono/yii2-file-upload)
+[![Total Downloads](https://poser.pugx.org/carono/yii2-file-upload/downloads)](https://packagist.org/packages/carono/yii2-file-upload)
+[![License](https://poser.pugx.org/carono/yii2-file-upload/license)](https://packagist.org/packages/carono/yii2-file-upload)
+
 Установка
 =========
 1. Создать миграцию и наследовать её от `carono\yii2file\FileUploadMigration`
