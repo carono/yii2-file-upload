@@ -142,10 +142,8 @@ class Uploader extends Component
      */
     public function copy($source, $destination)
     {
-        if (is_uploaded_file($source)) {
-            if (!move_uploaded_file($source, $destination)) {
-                throw new \Exception('Unknown upload error');
-            }
+        if (is_uploaded_file($source) && !move_uploaded_file($source, $destination)) {
+            throw new \Exception('Unknown upload error');
         } elseif ($this->delete ? !rename($source, $destination) : !copy($source, $destination)) {
             throw new \Exception('Failed to write file to disk');
         }
@@ -273,12 +271,12 @@ class Uploader extends Component
 
     /**
      * @param $path
-     * @param null $aliasPrefix
+     * @param null|string $aliasPrefix
      * @return string
      */
     public static function formAliasPath($path, $aliasPrefix = null)
     {
-        $p = [$aliasPrefix];
+        $p = $aliasPrefix ? [$aliasPrefix] : [];
         for ($i = 0; $i < 3; $i++) {
             $p[] = $path[$i];
         }

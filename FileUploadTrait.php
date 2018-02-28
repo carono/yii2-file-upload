@@ -56,7 +56,7 @@ trait FileUploadTrait
         $model = new self();
         return \Yii::createObject([
             'class' => $model->uploaderClass,
-            'modelClass' => self::className(),
+            'modelClass' => self::class,
             'file' => $file,
             'folder' => $model->fileUploadFolder
         ]);
@@ -68,7 +68,7 @@ trait FileUploadTrait
     public function deleteFile()
     {
         if ($this->fileExist()) {
-            @unlink($this->getRealFilePath());
+            unlink($this->getRealFilePath());
             if ($f = !$this->fileExist()) {
                 self::updateAttributes(["is_exist" => false]);
             }
@@ -83,7 +83,7 @@ trait FileUploadTrait
      */
     public function getRealFileName()
     {
-        if ($this->fileNameAsUid == true) {
+        if ($this->fileNameAsUid) {
             return $this->uid . '.' . $this->extension;
         } else {
             return $this->name . '.' . $this->extension;
