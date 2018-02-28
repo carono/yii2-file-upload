@@ -140,12 +140,50 @@ class Uploader extends Component
      * @param $destination
      * @throws \Exception
      */
+    protected function copyUploadedFile($source, $destination)
+    {
+        if (!move_uploaded_file($source, $destination)) {
+            throw new \Exception('Unknown upload error');
+        }
+    }
+
+    /**
+     * @param $source
+     * @param $destination
+     * @throws \Exception
+     */
+    protected function renameFile($source, $destination)
+    {
+        if (!rename($source, $destination)) {
+            throw new \Exception('Failed rename file');
+        }
+    }
+
+    /**
+     * @param $source
+     * @param $destination
+     * @throws \Exception
+     */
+    protected function copyFile($source, $destination)
+    {
+        if (!copy($source, $destination)) {
+            throw new \Exception('Failed copy file');
+        }
+    }
+
+    /**
+     * @param $source
+     * @param $destination
+     * @throws \Exception
+     */
     public function copy($source, $destination)
     {
-        if (is_uploaded_file($source) && !move_uploaded_file($source, $destination)) {
-            throw new \Exception('Unknown upload error');
-        } elseif ($this->delete ? !rename($source, $destination) : !copy($source, $destination)) {
-            throw new \Exception('Failed to write file to disk');
+        if (is_uploaded_file($source)) {
+            $this->copyUploadedFile($source, $destination);
+        } elseif ($this->delete) {
+            $this->renameFile($source, $destination);
+        } else {
+            $this->copyFile($source, $destination);
         }
     }
 
