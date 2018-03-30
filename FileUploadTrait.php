@@ -53,10 +53,10 @@ trait FileUploadTrait
      */
     public static function startUpload($file)
     {
-        $model = new self();
+        $model = new static();
         return \Yii::createObject([
             'class' => $model->uploaderClass,
-            'modelClass' => self::class,
+            'modelClass' => static::class,
             'file' => $file,
             'folder' => $model->fileUploadFolder
         ]);
