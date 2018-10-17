@@ -266,7 +266,7 @@ class Uploader extends Component
             $tmp = Yii::getAlias('@runtime') . DIRECTORY_SEPARATOR . uniqid("fu");
             file_put_contents($tmp, file_get_contents($file));
             $this->filePath = $tmp;
-            $this->fileName = basename($file);
+            $this->fileName = explode('?', basename($file))[0];
         } elseif (is_string($file)) {
             $this->filePath = Yii::getAlias($file);
             $this->fileName = basename($this->filePath);
