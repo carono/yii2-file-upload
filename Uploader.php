@@ -30,7 +30,7 @@ class Uploader extends Component
     public $uid;
     public $delete = true;
     public $folder;
-
+    public $context;
     protected $fileName;
     protected $filePath;
 
@@ -61,6 +61,12 @@ class Uploader extends Component
     public function folder($path)
     {
         $this->folder = $path;
+        return $this;
+    }
+
+    public function context($context)
+    {
+        $this->context = $context;
         return $this;
     }
 
@@ -243,7 +249,9 @@ class Uploader extends Component
         $this->loadAttributes($model, $this->formAttributes());
         $newFilePath = $model->getRealFilePath();
         if (!is_dir($realFolder = dirname($newFilePath))) {
-            mkdir($realFolder, 0777, true);
+            if (!mkdir($realFolder, 0777, true) && !is_dir($realFolder)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $realFolder));
+            }
         }
         if (!file_exists($this->filePath)) {
             throw new \Exception('File not loaded or not exist');
@@ -251,10 +259,10 @@ class Uploader extends Component
         $this->copy($this->filePath, $newFilePath);
         if ($model->save()) {
             return $model;
-        } else {
-            $model->deleteFile();
-            return null;
         }
+
+        $model->deleteFile();
+        return null;
     }
 
     /**
@@ -263,8 +271,9 @@ class Uploader extends Component
     protected function processFilePath($file)
     {
         if (strpos($file, 'http') === 0) {
-            $tmp = Yii::getAlias('@runtime') . DIRECTORY_SEPARATOR . uniqid("fu");
-            file_put_contents($tmp, file_get_contents($file));
+            $context = $this->context ? stream_context_create($this->context) : null;
+            $tmp = Yii::getAlias('@runtime') . DIRECTORY_SEPARATOR . uniqid('file_upload_', true);
+            file_put_contents($tmp, file_get_contents($file, false, $context));
             $this->filePath = $tmp;
             $this->fileName = explode('?', basename($file))[0];
         } elseif (is_string($file)) {
@@ -303,7 +312,7 @@ class Uploader extends Component
         $class = $this->modelClass;
         do {
             $uPath = $this->generateUid();
-        } while ($class::find()->where(["uid" => $uPath])->exists());
+        } while ($class::find()->where(['uid' => $uPath])->exists());
         return $uPath;
     }
 
@@ -318,6 +327,6 @@ class Uploader extends Component
         for ($i = 0; $i < 3; $i++) {
             $p[] = $path[$i];
         }
-        return join('/', $p);
+        return implode('/', $p);
     }
 }

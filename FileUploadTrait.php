@@ -5,6 +5,7 @@ namespace carono\yii2file;
 
 use yii\db\ActiveRecord;
 use yii\helpers\FileHelper;
+use carono\yii2file\Uploader;
 
 /**
  * Trait FileUploadTrait
@@ -38,7 +39,7 @@ trait FileUploadTrait
 {
     public $fileNameAsUid = true;
     public $eraseOnDelete = true;
-    public $uploaderClass = 'carono\yii2file\Uploader';
+    public $uploaderClass = Uploader::class;
     public $fileUploadFolder = '@app/files';
 
     public function init()
@@ -58,7 +59,7 @@ trait FileUploadTrait
             'class' => $model->uploaderClass,
             'modelClass' => static::class,
             'file' => $file,
-            'folder' => $model->fileUploadFolder
+            'folder' => $model->fileUploadFolder,
         ]);
     }
 
@@ -70,12 +71,12 @@ trait FileUploadTrait
         if ($this->fileExist()) {
             unlink($this->getRealFilePath());
             if ($f = !$this->fileExist()) {
-                self::updateAttributes(["is_exist" => false]);
+                $this->updateAttributes(['is_exist' => false]);
             }
             return $f;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**
@@ -85,9 +86,9 @@ trait FileUploadTrait
     {
         if ($this->fileNameAsUid) {
             return $this->uid . '.' . $this->extension;
-        } else {
-            return $this->name . '.' . $this->extension;
         }
+
+        return $this->name . '.' . $this->extension;
     }
 
     /**
@@ -114,9 +115,9 @@ trait FileUploadTrait
     {
         if (($mime = $this->mime_type) || ($mime = FileHelper::getMimeType($this->getRealFilePath()))) {
             return strpos($mime, 'image') === 0;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -124,7 +125,7 @@ trait FileUploadTrait
      */
     public function getFileName()
     {
-        return join('.', array_filter([$this->name, $this->extension]));
+        return implode('.', array_filter([$this->name, $this->extension]));
     }
 
     public function eraseOnDelete()
