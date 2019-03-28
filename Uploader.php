@@ -254,15 +254,14 @@ class Uploader extends Component
             }
         }
         if (!file_exists($this->filePath)) {
-            throw new \Exception('File not loaded or not exist');
+            throw new \RuntimeException('File not loaded or not exist');
         }
         $this->copy($this->filePath, $newFilePath);
         if ($model->save()) {
             return $model;
         }
-
         $model->deleteFile();
-        return null;
+        throw new \RuntimeException(current($model->getFirstErrors()));
     }
 
     /**
