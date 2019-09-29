@@ -1,6 +1,6 @@
 <?php
 
-namespace app\behaviors;
+namespace carono\yii2file\behaviors;
 
 use carono\yii2file\FileUploadTrait;
 use yii\db\ActiveRecord;

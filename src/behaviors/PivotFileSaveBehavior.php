@@ -1,7 +1,7 @@
 <?php
 
 
-namespace backend\behaviors;
+namespace carono\yii2file\behaviors;
 
 
 use carono\yii2file\FileUploadTrait;
