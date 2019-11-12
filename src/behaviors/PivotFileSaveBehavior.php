@@ -66,7 +66,7 @@ class PivotFileSaveBehavior extends \yii\base\Behavior
                 $this->_pivots[] = $class::findOne($value);
             } elseif ($this->fileProcess instanceof \Closure) {
                 $this->_pivots[] = call_user_func_array($this->fileProcess, [$value, $class]);
-            } elseif ($value instanceof UploadedFile) {
+            } elseif ($value instanceof UploadedFile || is_string($value)) {
                 $this->_pivots[] = $class::startUpload($value)->process();
             }
         }
