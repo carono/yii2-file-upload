@@ -18,9 +18,10 @@ class PivotSaveBehavior extends \yii\base\Behavior
 {
     protected $_pivots;
     public $attribute;
-    public $field;
     public $pivotClass;
-    public $fileClass;
+    public $modelClass;
+    public $prepareValues;
+    public $deletePivotsBeforeSave = true;
 
     public function canSetProperty($name, $checkVars = true)
     {
@@ -50,13 +51,16 @@ class PivotSaveBehavior extends \yii\base\Behavior
      */
     protected function getModelClass()
     {
-        return $this->fileClass;
+        return $this->modelClass;
     }
 
     protected function setPivots($values)
     {
         $class = $this->getModelClass();
         $this->_pivots = [];
+        if ($this->prepareValues instanceof \Closure) {
+            $values = call_user_func($this->prepareValues, (array)$values);
+        }
         foreach ((array)$values as $value) {
             if (is_numeric($value)) {
                 $this->_pivots[] = $class::findOne($value);
@@ -70,7 +74,10 @@ class PivotSaveBehavior extends \yii\base\Behavior
 
     public function savePivots()
     {
-        if ($this->_pivots !== null) {
+        if (!method_exists($this->owner, 'addPivot')) {
+            throw new \Exception('Class ' . get_class($this->owner) . ' must use carono\yii2migrate\traits\PivotTrait trait');
+        }
+        if ($this->deletePivotsBeforeSave && $this->_pivots !== null) {
             $this->owner->deletePivots($this->pivotClass);
         }
         if ($this->_pivots) {
