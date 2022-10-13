@@ -6,6 +6,7 @@ namespace carono\yii2file\behaviors;
 
 use carono\yii2file\FileUploadTrait;
 use carono\yii2migrate\traits\PivotTrait;
+use Closure;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
 
@@ -22,6 +23,7 @@ class PivotFileSaveBehavior extends \yii\base\Behavior
     public $pivotClass;
     public $fileProcess;
     public $fileClass;
+    public $pivotAttributes;
 
     public function canSetProperty($name, $checkVars = true)
     {
@@ -81,8 +83,13 @@ class PivotFileSaveBehavior extends \yii\base\Behavior
 
     public function savePivots()
     {
-        foreach ((array)$this->_pivots as $pv) {
-            $this->owner->addPivot($pv, $this->pivotClass);
+        foreach ((array)$this->_pivots as $index => $pv) {
+            if ($this->pivotAttributes instanceof Closure) {
+                $attributes = call_user_func_array($this->pivotAttributes, [$pv, $index]);
+            } else {
+                $attributes = $this->pivotAttributes ?: [];
+            }
+            $this->owner->addPivot($pv, $this->pivotClass, $attributes ?: []);
         }
     }
 }
