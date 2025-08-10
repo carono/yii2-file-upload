@@ -3,9 +3,11 @@
 
 namespace carono\yii2file;
 
+use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\FileHelper;
 use carono\yii2file\Uploader;
+use yii\helpers\Url;
 
 /**
  * Trait FileUploadTrait
@@ -41,6 +43,7 @@ trait FileUploadTrait
     public $eraseOnDelete = true;
     public $uploaderClass = Uploader::class;
     public $fileUploadFolder = '@app/files';
+    public $fileWebFolder = '@web/files';
 
     public function init()
     {
@@ -133,5 +136,11 @@ trait FileUploadTrait
         if ($this->eraseOnDelete && $this->fileExist()) {
             $this->deleteFile();
         }
+    }
+
+    public function formUrl($web = null)
+    {
+        $class = $this->uploaderClass;
+        return Url::to([Yii::getAlias($web ?: $this->fileWebFolder) . '/' . $class::formAliasPath($this->uid) . '/' . $this->uid . '.' . $this->extension], true);
     }
 }
