@@ -21,6 +21,8 @@ class FileSaveBehavior extends \yii\base\Behavior
      * @var FileUploadTrait
      */
     public $fileClass;
+    public $saveFile;
+    public $removeFileValue = 'remove';
 
     public function canSetProperty($name, $checkVars = true)
     {
@@ -44,15 +46,33 @@ class FileSaveBehavior extends \yii\base\Behavior
             $this->_file = UploadedFile::getInstance($this->owner, $this->attribute);
         }
         $eventName = $this->owner->isNewRecord ? ActiveRecord::EVENT_BEFORE_INSERT : ActiveRecord::EVENT_BEFORE_UPDATE;
-        $this->owner->on($eventName, [$this, 'saveFile']);
+
+        $data = [
+            'file' => $this->_file,
+            'field' => $this->field,
+            'attribute' => $this->attribute,
+            'fileClass' => $this->fileClass,
+            'remove' => $value == $this->removeFileValue
+        ];
+
+        $this->owner->on($eventName, $this->saveFile instanceof \Closure ? $this->saveFile : [$this, 'saveFile'], $data);
     }
 
-    public function saveFile()
+    public function saveFile($event)
     {
-        if ($this->_file && $this->_file instanceof UploadedFile) {
-            $field = $this->field ?: $this->attribute . '_id';
-            $class = $this->fileClass;
-            $this->owner->{$field} = $class::startUpload($this->_file)->process()->id;
+        $file = $event->data['file'];
+        $field = $event->data['field'];
+        $attribute = $event->data['attribute'];
+        $fileClass = $event->data['fileClass'];
+        $remove = $event->data['remove'];
+
+        if ($file && $file instanceof UploadedFile) {
+            $field = $field ?: $attribute . '_id';
+            $this->owner->{$field} = $fileClass::startUpload($file)->process()->id;
+        }
+        
+        if ($remove) {
+            $this->owner->{$field} = null;
         }
     }
 }
