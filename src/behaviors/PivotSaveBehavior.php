@@ -22,6 +22,8 @@ class PivotSaveBehavior extends \yii\base\Behavior
     public $modelClass;
     public $prepareValues;
     public $deletePivotsBeforeSave = true;
+    public $savePivots;
+    public $inverseInsertPivot = false;
 
     public function canSetProperty($name, $checkVars = true)
     {
@@ -69,7 +71,11 @@ class PivotSaveBehavior extends \yii\base\Behavior
             }
         }
         $eventName = $this->owner->isNewRecord ? ActiveRecord::EVENT_AFTER_INSERT : ActiveRecord::EVENT_AFTER_UPDATE;
-        $this->owner->on($eventName, [$this, 'savePivots']);
+        if ($this->savePivots instanceof \Closure) {
+            call_user_func($this->savePivots, $this, $this->pivotClass, $this->_pivots);
+        } else {
+            $this->owner->on($eventName, [$this, 'savePivots']);
+        }
     }
 
     public function savePivots()
@@ -82,7 +88,11 @@ class PivotSaveBehavior extends \yii\base\Behavior
         }
         if ($this->_pivots) {
             foreach ($this->_pivots as $pv) {
-                $this->owner->addPivot($pv, $this->pivotClass);
+                if ($this->inverseInsertPivot) {
+                    $pv->addPivot($this->owner, $this->pivotClass);
+                } else {
+                    $this->owner->addPivot($pv, $this->pivotClass);
+                }
             }
         }
     }
