@@ -272,7 +272,22 @@ class Uploader extends Component
         if (strpos($file, 'http') === 0) {
             $context = $this->context ? stream_context_create($this->context) : null;
             $tmp = Yii::getAlias('@runtime') . DIRECTORY_SEPARATOR . uniqid('file_upload_', true);
-            file_put_contents($tmp, file_get_contents($file, false, $context));
+            $readStream = fopen($file, 'rb', false, $context);
+            if ($readStream === false) {
+                throw new \RuntimeException("Не удалось открыть удалённый файл: {$file}");
+            }
+            $writeStream = fopen($tmp, 'wb');
+            if ($writeStream === false) {
+                fclose($readStream);
+                throw new \RuntimeException("Не удалось создать временный файл: {$tmp}");
+            }
+            $result = stream_copy_to_stream($readStream, $writeStream);
+            fclose($readStream);
+            fclose($writeStream);
+            if ($result === false) {
+                @unlink($tmp);
+                throw new \RuntimeException("Ошибка при копировании файла: {$file}");
+            }
             $this->filePath = $tmp;
             $this->fileName = explode('?', basename($file))[0];
         } elseif (is_string($file)) {
